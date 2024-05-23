@@ -42,6 +42,16 @@ class Quiz{
             this.showResult();
         }
     }
+
+    showResult() {
+        quizContainer.style.display = "none";
+        resultContainer.style.display = "block";
+        resultContainer.innerHTML = `
+            <h2>Quiz Result</h2>
+            <p>You scored ${this.score} out of ${this.questions.length} questions</p>
+            <button id="reload-quiz">Reload All Quiz</button>
+        `;
+    }
 }
 
 const loadQuiz = (questions) => {
