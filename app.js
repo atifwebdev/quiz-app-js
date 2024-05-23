@@ -5,18 +5,19 @@ const resultContainer = document.getElementById('results-container');
 const questionContainer = document.getElementById('question-container');
 const answerButtonsContainer = document.getElementById('answer-buttons-container');
 
-class Quiz{
-    constructor (questions) {
-        this.questions = questions;
+class Quiz {
+    constructor(questions) {
+        this.questions = Quiz.shuffleArray(questions);
         this.currentQuestionIndex = 0;
         this.score = 0;
+        this.displayQuestion();
     }
 
-    displayQuestion () {
+    displayQuestion() {
         answerButtonsContainer.innerHTML = "";
         const currentQuestion = this.questions[this.currentQuestionIndex];
         questionContainer.textContent = currentQuestion.question;
-        const answers = currentQuestion.answers;
+        const answers = Quiz.shuffleArray(currentQuestion.answers);
         answers.forEach(answer => {
             const button = document.createElement("button");
             button.classList = ["answer-button"];
@@ -26,10 +27,10 @@ class Quiz{
         });
     }
 
-    checkAnswer (event) {
+    checkAnswer(event) {
         const selectedAnswer = event.target.textContent;
         const currentQuestion = this.questions[this.currentQuestionIndex];
-        if (selectedAnswer === currentQuestion.correctAnswer){
+        if (selectedAnswer === currentQuestion.correctAnswer) {
             this.score++;
             // console.log(this.score);
         }
@@ -38,7 +39,7 @@ class Quiz{
 
         if (this.currentQuestionIndex < this.questions.length) {
             this.displayQuestion();
-        } else{
+        } else {
             this.showResult();
         }
     }
@@ -51,12 +52,21 @@ class Quiz{
             <p>You scored ${this.score} out of ${this.questions.length} questions</p>
             <button id="reload-quiz">Reload All Quiz</button>
         `;
+
+        document.getElementById("reload-quiz").addEventListener("click", () => {
+            quizContainer.style.display = "none";
+            resultContainer.style.display = "none";
+            quizSelector.style.display = "flex";
+        });
+    }
+
+    static shuffleArray(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
     }
 }
 
 const loadQuiz = (questions) => {
-    const quiz =  new Quiz(questions);
-    quiz.displayQuestion();
+    const quiz = new Quiz(questions);
     quizContainer.style.display = "block";
     quizSelector.style.display = "none";
 };
